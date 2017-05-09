@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="{% static 'WishList/css/style.css' %}">
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="main">
+        <div class="head">
+          <div class="logo">
+            <h1>{{ title }}</h1>
+          </div>
+          <div class="login">
+            {% if request.session.user_id %}
+            Welcome {{ first_name }}
+            <a href="{% url 'WishList:index' %}">Home</a> <a href="{% url 'WishList:logOut' %}">Log Out</a>
+            {% else %}
+            <a href="{% url 'WishList:login' %}">log In</a> <a href="{% url 'WishList:register' %}">Register</a>
+            {% endif %}
+          </div>
+        </div>
+        <div class="clear"></div>
+        {% if request.session.user_id %}
+        <div class="content">
+          <form class="" action="{% url 'WishList:addWish' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="user_id" value="{{ request.session.user_id }}">
+            <table>
+              <tr>
+                <td>Wish Title</td>
+                <td><input type="text" name="title" value=""></td>
+              </tr>
+              <tr>
+                <td>Wish conment</td>
+                <td><textarea name="wish" rows="8" cols="80"></textarea></td>
+              </tr>
+              <tr>
+                <td colspan="2"><input type="submit" name="" value="Make a wish"></td>
+              </tr>
+            </table>
+          </form>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </body>
+</html>

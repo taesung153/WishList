@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="{% static 'WishList/css/style.css' %}">
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="main">
+        <div class="head">
+          <div class="logo">
+            <h1>{{ title }}</h1>
+          </div>
+          <div class="login">
+            {% if request.session.user_id %}
+            Welcome {{ user.first_name }}
+            <a href="{% url 'WishList:logOut' %}">Log Out</a>
+            {% else %}
+            <a href="{% url 'WishList:login' %}">log In</a> <a href="{% url 'WishList:register' %}">Register</a>
+            {% endif %}
+          </div>
+        </div>
+        <div class="clear"></div>
+        {% if request.session.user_id %}
+        <div class="wish">
+          <h1><a href="{% url 'WishList:addWish' %}">I want to make a WISH</a></h1>
+          {% if mywishs %}
+          <h3>My Wish List:</h3>
+          <table>
+            <tr>
+              <th>Item</th>
+              <th>Added by</th>
+              <th>Date Added</th>
+              <th>Action</th>
+            </tr>
+            {% for wish in mywishs %}
+            <tr>
+              <td>{{ wish.wish }}</td>
+              <td>{{ wish.user_id.first_name }} {{ wish.user_id.last_name }}</td>
+              <td>{{ wish.updated_at }}</td>
+              <td><a href="{% url 'WishList:delWish' id %}">Remove from my Wishlist</a></td>
+            </tr>
+            {% endfor %}
+          </table>
+          {% endif %}
+          {% if allwishs %}
+          <h3>Other Users's Wish List:</h3>
+          <table>
+            <tr>
+              <th>Item</th>
+              <th>Added by</th>
+              <th>Date Added</th>
+              <th>Action</th>
+            </tr>
+            {% for wish in allwishs %}
+            <tr>
+              <td>{{ wish.wish }}</td>
+              <td>{{ wish.user_id.first_name }} {{ wish.user_id.last_name }}</td>
+              <td>{{ wish.updated_at }}</td>
+              <td><a href="{% url 'WishList:delWish' id %}">Add to my Wishlist</a></td>
+            </tr>
+            {% endfor %}
+          </table>
+          {% endif %}
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </body>
+</html>
